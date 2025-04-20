@@ -1,0 +1,23 @@
+controller:
+  admin:
+    username: admin
+    password: secure_password
+
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    hostName: jenkins.local
+    path: /
+    pathType: Prefix
+    ingressClassName: nginx
+
+  serviceType: ClusterIP
+  servicePort: 8080 # Ensure Jenkins is exposed on port 8080
+
+persistence:
+  enabled: true
+  existingClaim: jenkins
+  storageClass: ""
+  size: 5Gi
+

@@ -1,0 +1,27 @@
+controller:
+  kind: DaemonSet
+  hostPort:
+    enabled: true
+    ports:
+      http: 80
+      https: 443
+      jenkins: 8080 # Added port configuration for Jenkins
+
+  service:
+    type: ClusterIP
+
+  nodeSelector:
+    "kubernetes.io/os": linux
+
+  tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+
+tcp:
+  "8080": "jenkins/jenkins:8080"

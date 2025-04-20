@@ -1,0 +1,18 @@
+# jenkins-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv
+spec:
+  storageClassName: jenkins-pv
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data/jenkins
+  claimRef:
+    namespace: jenkins
+    name: jenkins
+

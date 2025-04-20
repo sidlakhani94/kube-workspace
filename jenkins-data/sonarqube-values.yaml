@@ -1,0 +1,62 @@
+monitoringPasscode: "sonarMonitor123"
+
+community:
+  enabled: true
+
+persistence:
+  enabled: true
+  existingClaim: sonarqube
+  storageClass: ""
+  size: 3Gi
+
+postgresql:
+  enabled: true
+  persistence:
+    enabled: true
+    existingClaim: data-sonarqube-postgresql-0
+    size: 3Gi
+    storageClass: ""
+
+  primary:
+    containerSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
+
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+
+    extraVolumes:
+      - name: tmp-volume
+        emptyDir: {}
+
+    extraVolumeMounts:
+      - name: tmp-volume
+        mountPath: /tmp
+
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - name: sonarqube.local
+      path: /
+      pathType: Prefix
+  ingressClassName: nginx
+
+service:
+  type: ClusterIP
+
